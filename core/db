@@ -1,1 +1,16 @@
-ola mundo de novo
+{
+  "todos": [
+    {
+      "id": "4cefd6f4-7e7c-45d2-8775-80a4b396e1a5",
+      "date": "2023-07-05T18:38:58.303Z",
+      "content": "1 todo",
+      "done": false
+    },
+    {
+      "id": "0ca78215-41d9-4269-943e-bc1ffb1596ac",
+      "date": "2023-07-05T18:38:58.304Z",
+      "content": "terceira todo",
+      "done": false
+    }
+  ]
+}

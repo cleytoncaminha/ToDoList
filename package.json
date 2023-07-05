@@ -4,14 +4,20 @@
   "description": "CRUD to do list",
   "main": "index.js",
   "scripts": {
-    "start": "node ./core/crud.js",
-    "dev": "nodemon ./core/crud.js",
+    "start:crud": "npx ts-node ./core/crud.ts",
+    "dev:crud": "nodemon --ext ts,tsx --exec npm run start:crud",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "typescript": "^5.1.6",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.3",
+    "@types/uuid": "^9.0.2"
   }
 }
