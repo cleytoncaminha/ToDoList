@@ -6,18 +6,26 @@
   "scripts": {
     "start:crud": "npx ts-node ./core/crud.ts",
     "dev:crud": "nodemon --ext ts,tsx --exec npm run start:crud",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "next": "^13.4.9",
     "nodemon": "^2.0.22",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "typescript": "^5.1.6",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.3.3",
+    "@types/react": "18.2.14",
     "@types/uuid": "^9.0.2"
   }
 }
