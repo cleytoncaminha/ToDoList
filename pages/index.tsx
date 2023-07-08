@@ -1,4 +1,4 @@
-import React from "react";
+import React, { InputHTMLAttributes } from "react";
 import { GlobalStyles } from "../src/ui/theme/GlobalStyles";
 import { todoController } from "@ui/controller/todo";
 
@@ -15,8 +15,15 @@ function HomePage() {
     const [todos, setTodos] = React.useState<HomeTodo[]>([]);
     const [totalPages, setTotalPages] = React.useState(0);
     const [isLoading, setIsLoading] = React.useState(true);
+    const [search, setSearch] = React.useState("");
+
+    const homeTodos = todoController.filterTodosByContent<HomeTodo>(
+        search,
+        todos
+    );
+
     const hasMorePages = totalPages > page;
-    const hasNoTodos = todos.length === 0 && !isLoading;
+    const hasNoTodos = homeTodos.length === 0 && !isLoading;
 
     React.useEffect(() => {
         setInitialLoadComplete(true);
@@ -55,6 +62,9 @@ function HomePage() {
                     <input
                         type="text"
                         placeholder="Filtrar lista atual, ex: Dentista"
+                        onChange={(event) => {
+                            setSearch(event.target.value);
+                        }}
                     />
                 </form>
 
@@ -71,7 +81,7 @@ function HomePage() {
                     </thead>
 
                     <tbody>
-                        {todos.map((currentTodo) => {
+                        {homeTodos.map((currentTodo) => {
                             return (
                                 <tr key={currentTodo.id}>
                                     <td>
