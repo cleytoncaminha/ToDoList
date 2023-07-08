@@ -12,12 +12,18 @@ interface HomeTodo {
 function HomePage() {
     const [page, setPage] = React.useState(1);
     const [todos, setTodos] = React.useState<HomeTodo[]>([]);
+    const [totalPages, setTotalPages] = React.useState(0);
+
+    const hasMorePages = totalPages > page;
 
     React.useEffect(() => {
-        todoController.get({ page }).then(({ todos }) => {
-            setTodos(todos);
+        todoController.get({ page }).then(({ todos, pages }) => {
+            setTodos((oldTodos) => {
+                return [...oldTodos, ...todos];
+            });
+            setTotalPages(pages);
         });
-    }, []);
+    }, [page]);
 
     return (
         <main>
@@ -59,25 +65,22 @@ function HomePage() {
                     </thead>
 
                     <tbody>
-                        {todos &&
-                            todos.map((currentTodo) => {
-                                return (
-                                    <tr key={currentTodo.id}>
-                                        <td>
-                                            <input type="checkbox" />
-                                        </td>
-                                        <td>
-                                            {currentTodo.id.substring(0, 4)}
-                                        </td>
-                                        <td>{currentTodo.content}</td>
-                                        <td align="right">
-                                            <button data-type="delete">
-                                                Apagar
-                                            </button>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                        {todos.map((currentTodo) => {
+                            return (
+                                <tr key={currentTodo.id}>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                    <td>{currentTodo.id.substring(0, 4)}</td>
+                                    <td>{currentTodo.content}</td>
+                                    <td align="right">
+                                        <button data-type="delete">
+                                            Apagar
+                                        </button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
 
                         <tr>
                             <td
@@ -95,29 +98,31 @@ function HomePage() {
                             </td>
                         </tr>
 
-                        <tr>
-                            <td
-                                colSpan={4}
-                                align="center"
-                                style={{ textAlign: "center" }}
-                            >
-                                <button
-                                    data-type="load-more"
-                                    onClick={() => setPage(page + 1)}
+                        {hasMorePages && (
+                            <tr>
+                                <td
+                                    colSpan={4}
+                                    align="center"
+                                    style={{ textAlign: "center" }}
                                 >
-                                    pagina {page}, Carregar mais{" "}
-                                    <span
-                                        style={{
-                                            display: "inline-block",
-                                            marginLeft: "4px",
-                                            fontSize: "1.2em",
-                                        }}
+                                    <button
+                                        data-type="load-more"
+                                        onClick={() => setPage(page + 1)}
                                     >
-                                        ↓
-                                    </span>
-                                </button>
-                            </td>
-                        </tr>
+                                        pagina {page}, Carregar mais{" "}
+                                        <span
+                                            style={{
+                                                display: "inline-block",
+                                                marginLeft: "4px",
+                                                fontSize: "1.2em",
+                                            }}
+                                        >
+                                            ↓
+                                        </span>
+                                    </button>
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </section>

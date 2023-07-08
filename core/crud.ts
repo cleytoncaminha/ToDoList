@@ -110,6 +110,8 @@ const firstTodo = create("1 todo");
 const secondTodo = create("2 todo");
 deleteById(secondTodo.id);
 const thirdTodo = create("3 todo");
+create("4 todo");
+create("5 todo");
 /*
 update(thirdTodo.id, {
     content: "3 todo atualizada",
