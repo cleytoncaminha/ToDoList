@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes } from "react";
+import React from "react";
 import { GlobalStyles } from "../src/ui/theme/GlobalStyles";
 import { todoController } from "@ui/controller/todo";
 
@@ -10,12 +10,13 @@ interface HomeTodo {
 }
 
 function HomePage() {
-    const [initialLoadComplete, setInitialLoadComplete] = React.useState(false);
+    const initialLoadComplete = React.useRef(false);
     const [page, setPage] = React.useState(1);
     const [todos, setTodos] = React.useState<HomeTodo[]>([]);
     const [totalPages, setTotalPages] = React.useState(0);
     const [isLoading, setIsLoading] = React.useState(true);
     const [search, setSearch] = React.useState("");
+    const [newTodoContent, setnewTodoContent] = React.useState("");
 
     const homeTodos = todoController.filterTodosByContent<HomeTodo>(
         search,
@@ -26,15 +27,17 @@ function HomePage() {
     const hasNoTodos = homeTodos.length === 0 && !isLoading;
 
     React.useEffect(() => {
-        setInitialLoadComplete(true);
-        if (!initialLoadComplete) {
+        if (!initialLoadComplete.current) {
             todoController
                 .get({ page })
                 .then(({ todos, pages }) => {
                     setTodos(todos);
                     setTotalPages(pages);
                 })
-                .finally(() => setIsLoading(false));
+                .finally(() => {
+                    setIsLoading(false);
+                    initialLoadComplete.current = true;
+                });
         }
     }, []);
 
@@ -49,8 +52,33 @@ function HomePage() {
                 <div className="typewriter">
                     <h1>O que fazer hoje?</h1>
                 </div>
-                <form>
-                    <input type="text" placeholder="Correr, Estudar..." />
+                <form
+                    onSubmit={(event) => {
+                        event.preventDefault();
+                        todoController.create({
+                            content: newTodoContent,
+                            onSuccess(todo: HomeTodo) {
+                                setTodos((oldTodos) => {
+                                    return [todo, ...oldTodos];
+                                });
+                            },
+                            onError() {
+                                alert(
+                                    "Voce precisa do conteudo para criar um novo item na lista"
+                                );
+                            },
+                        });
+                        setnewTodoContent("");
+                    }}
+                >
+                    <input
+                        type="text"
+                        placeholder="Correr, Estudar..."
+                        value={newTodoContent}
+                        onChange={function filterHandler(event) {
+                            setnewTodoContent(event.target.value);
+                        }}
+                    />
                     <button type="submit" aria-label="Adicionar novo item">
                         +
                     </button>
@@ -62,7 +90,7 @@ function HomePage() {
                     <input
                         type="text"
                         placeholder="Filtrar lista atual, ex: Dentista"
-                        onChange={(event) => {
+                        onChange={function filterHandler(event) {
                             setSearch(event.target.value);
                         }}
                     />

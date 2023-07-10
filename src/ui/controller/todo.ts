@@ -4,6 +4,12 @@ interface todoControllerGetParams {
     page: number;
 }
 
+interface todoControllerCreateParams {
+    content?: string;
+    onError: () => void;
+    onSuccess: (todo: any) => void;
+}
+
 async function get(params: todoControllerGetParams) {
     return todoRepository.get({
         page: params.page,
@@ -24,7 +30,22 @@ function filterTodosByContent<Todo>(
     return homeTodos;
 }
 
+function create({ content, onError, onSuccess }: todoControllerCreateParams) {
+    if (!content) {
+        onError();
+        return;
+    }
+    const todo = {
+        id: "!1231233",
+        content,
+        date: new Date(),
+        done: false,
+    };
+    onSuccess(todo);
+}
+
 export const todoController = {
     get,
     filterTodosByContent,
+    create,
 };
