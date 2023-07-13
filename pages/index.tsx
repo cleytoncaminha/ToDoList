@@ -62,9 +62,10 @@ function HomePage() {
                                     return [todo, ...oldTodos];
                                 });
                             },
-                            onError() {
+                            onError(customMessage) {
                                 alert(
-                                    "Voce precisa do conteudo para criar um novo item na lista"
+                                    customMessage ||
+                                        "Voce precisa do conteudo para criar um novo item"
                                 );
                             },
                         });
