@@ -74,6 +74,7 @@ function HomePage() {
                     }}
                 >
                     <input
+                        name="add-todo"
                         type="text"
                         placeholder="Correr, Estudar..."
                         value={newTodoContent}
@@ -81,7 +82,11 @@ function HomePage() {
                             setnewTodoContent(event.target.value);
                         }}
                     />
-                    <button type="submit" aria-label="Adicionar novo item">
+                    <button
+                        type="submit"
+                        aria-label="Adicionar novo item"
+                        data-cy="submit-todo"
+                    >
                         +
                     </button>
                 </form>

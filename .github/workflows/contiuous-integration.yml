@@ -1,0 +1,19 @@
+name: "[CI] Continuous integration"
+
+# Always commit and Pull Request open
+
+on:
+    pull_request:
+        types: [opened, synchronize]
+
+jobs: 
+    lint:
+        runs-on: ubunt-latest
+        steps:
+            -   uses: actions/checkout@v3
+            -   name: "Debug"
+                run: "ls -la"
+            -   name: "Install Dependencies"
+                run: "npm install"
+            -   name: "Lint"
+                run: "npm run lint"
