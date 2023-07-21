@@ -7,6 +7,7 @@ const bg = "/bg.jpeg";
 interface HomeTodo {
     id: string;
     content: string;
+    done: boolean;
 }
 
 function HomePage() {
@@ -110,14 +111,55 @@ function HomePage() {
                     </thead>
 
                     <tbody>
-                        {homeTodos.map((currentTodo) => {
+                        {homeTodos.map((todo) => {
                             return (
-                                <tr key={currentTodo.id}>
+                                <tr key={todo.id}>
                                     <td>
-                                        <input type="checkbox" />
+                                        <input
+                                            type="checkbox"
+                                            checked={todo.done}
+                                            onChange={function handleToggle() {
+                                                todoController.toggleDone({
+                                                    id: todo.id,
+                                                    onError() {
+                                                        alert(
+                                                            "Falha ao atualizar a TODO :("
+                                                        );
+                                                    },
+                                                    updateTodoOnScreen() {
+                                                        setTodos(
+                                                            (currentTodos) => {
+                                                                return currentTodos.map(
+                                                                    (
+                                                                        currentTodo
+                                                                    ) => {
+                                                                        if (
+                                                                            currentTodo.id ===
+                                                                            todo.id
+                                                                        ) {
+                                                                            return {
+                                                                                ...currentTodo,
+                                                                                done: !currentTodo.done,
+                                                                            };
+                                                                        }
+                                                                        return currentTodo;
+                                                                    }
+                                                                );
+                                                            }
+                                                        );
+                                                    },
+                                                });
+                                            }}
+                                        />
                                     </td>
-                                    <td>{currentTodo.id.substring(0, 4)}</td>
-                                    <td>{currentTodo.content}</td>
+                                    <td>{todo.id.substring(0, 4)}</td>
+                                    <td>
+                                        {todo.done ? (
+                                            <s>todo.content</s>
+                                        ) : (
+                                            todo.content
+                                        )}
+                                    </td>
                                     <td align="right">
                                         <button data-type="delete">
                                             Apagar

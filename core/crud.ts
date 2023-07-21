@@ -83,7 +83,7 @@ function updateContentById(id: UUID, content: string): Todo {
     });
 }
 
-function deleteById(id: UUID) {
+export function deleteById(id: UUID) {
     const todos = read();
 
     const todosWithoutOne = todos.filter((todo) => {
@@ -104,7 +104,6 @@ function deleteById(id: UUID) {
         )
     );
 }
-
 clearDB();
 const firstTodo = create("1 todo");
 const secondTodo = create("2 todo");

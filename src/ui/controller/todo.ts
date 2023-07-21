@@ -12,8 +12,13 @@ interface TodoControllerCreateParams {
     onSuccess: (todo: Todo) => void;
 }
 
+interface TodoControllerToggleDoneParams {
+    id: string;
+    updateTodoOnScreen: () => void;
+    onError: () => void;
+}
+
 async function get(params: TodoControllerGetParams) {
-    // Fazer a lógica de pegar os dados
     return todoRepository.get({
         page: params.page,
         limit: 2,
@@ -51,8 +56,28 @@ function create({ content, onSuccess, onError }: TodoControllerCreateParams) {
         });
 }
 
+function toggleDone({
+    id,
+    updateTodoOnScreen,
+    onError,
+}: TodoControllerToggleDoneParams) {
+    // Optmistic Update
+    // updateTodoOnScreen();
+
+    todoRepository
+        .toggleDone(id)
+        .then(() => {
+            // Update Real
+            updateTodoOnScreen();
+        })
+        .catch(() => {
+            onError();
+        });
+}
+
 export const todoController = {
     get,
     filterTodosByContent,
     create,
+    toggleDone,
 };
