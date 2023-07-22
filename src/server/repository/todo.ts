@@ -1,79 +1,79 @@
 import {
-    read,
-    create,
-    update,
-    deleteById as dbDeleteById,
+  read,
+  create,
+  update,
+  deleteById as dbDeleteById,
 } from "@db-crud-todo";
 import { HttpNotFoundError } from "@server/infra/errors";
 
 interface TodoRepositoryGetParams {
-    page?: number;
-    limit?: number;
+  page?: number;
+  limit?: number;
 }
 interface TodoRepositoryGetOutput {
-    todos: Todo[];
-    total: number;
-    pages: number;
+  todos: Todo[];
+  total: number;
+  pages: number;
 }
 function get({
-    page,
-    limit,
+  page,
+  limit,
 }: TodoRepositoryGetParams = {}): TodoRepositoryGetOutput {
-    const currentPage = page || 1;
-    const currentLimit = limit || 10;
-    const ALL_TODOS = read();
+  const currentPage = page || 1;
+  const currentLimit = limit || 10;
+  const ALL_TODOS = read();
 
-    const startIndex = (currentPage - 1) * currentLimit;
-    const endIndex = currentPage * currentLimit;
-    const paginatedTodos = ALL_TODOS.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(ALL_TODOS.length / currentLimit);
+  const startIndex = (currentPage - 1) * currentLimit;
+  const endIndex = currentPage * currentLimit;
+  const paginatedTodos = ALL_TODOS.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(ALL_TODOS.length / currentLimit);
 
-    return {
-        total: ALL_TODOS.length,
-        todos: paginatedTodos,
-        pages: totalPages,
-    };
+  return {
+    total: ALL_TODOS.length,
+    todos: paginatedTodos,
+    pages: totalPages,
+  };
 }
 async function createByContent(content: string): Promise<Todo> {
-    const newTodo = await create(content);
-    return newTodo;
+  const newTodo = await create(content);
+  return newTodo;
 }
 
 async function toggleDone(id: string): Promise<Todo> {
-    const ALL_TODOS = read();
+  const ALL_TODOS = read();
 
-    const todo = ALL_TODOS.find((todo) => todo.id === id);
+  const todo = ALL_TODOS.find((todo) => todo.id === id);
 
-    if (!todo) throw new Error(`Todo with "${id}" not found`);
+  if (!todo) throw new Error(`Todo with "${id}" not found`);
 
-    const updatedTodo = update(todo.id, {
-        done: !todo.done,
-    });
+  const updatedTodo = update(todo.id, {
+    done: !todo.done,
+  });
 
-    return updatedTodo;
+  return updatedTodo;
 }
 
 async function deleteById(id: string) {
-    const ALL_TODOS = read();
+  const ALL_TODOS = read();
 
-    const todo = ALL_TODOS.find((todo) => todo.id === id);
+  const todo = ALL_TODOS.find((todo) => todo.id === id);
 
-    if (!todo) throw new HttpNotFoundError(`Todo with "${id}" not found`);
+  if (!todo) throw new HttpNotFoundError(`Todo with "${id}" not found`);
 
-    dbDeleteById(id);
+  dbDeleteById(id);
 }
 
 export const todoRepository = {
-    get,
-    createByContent,
-    toggleDone,
-    deleteById,
+  get,
+  createByContent,
+  toggleDone,
+  deleteById,
 };
 
 // Model/Schema
 interface Todo {
-    id: string;
-    content: string;
-    date: string;
-    done: boolean;
+  id: string;
+  content: string;
+  date: string;
+  done: boolean;
 }
