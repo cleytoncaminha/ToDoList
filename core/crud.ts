@@ -106,7 +106,7 @@ export function deleteById(id: UUID) {
 }
 clearDB();
 create("1 todo");
-const secondTodo = create("2 todo");
+const secondTodo = create("2 todos");
 deleteById(secondTodo.id);
 create("3 todo");
 create("4 todo");
