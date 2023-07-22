@@ -1,7 +1,5 @@
 name: "[CI] Continuous integration"
 
-# Always commit and Pull Request open
-
 on:
     pull_request:
         types: [opened, synchronize]
