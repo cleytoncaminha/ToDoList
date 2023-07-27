@@ -147,7 +147,7 @@ function HomePage() {
                     />
                   </td>
                   <td>{todo.id.substring(0, 4)}</td>
-                  <td>{todo.done ? <s>todo.content</s> : todo.content}</td>
+                  <td>{todo.done ? <s>{todo.content}</s> : todo.content}</td>
                   <td align="right">
                     <button
                       data-type="delete"
